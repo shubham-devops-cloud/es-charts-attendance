@@ -8,12 +8,12 @@ metadata:
     app: "{{ .Values.APP }}"
     microservice: "{{ .Values.MICROSERVICE }}"
 spec:
-  replicas: "{{ .Values.K8S_REPLICAS }}"
+  replicas: {{ .Values.K8S_REPLICAS }}
   strategy: 
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: "{{ .Values.K8S_MAX_UNAVAIL }}"
-      maxSurge: "{{ .Values.K8S_MAX_SURGE }}"
+      maxUnavailable: {{ .Values.K8S_MAX_UNAVAIL }}
+      maxSurge: {{ .Values.K8S_MAX_SURGE }}
   selector:
     matchLabels:
       environment: "{{ .Values.NAMESPACE }}"
