@@ -1,0 +1,4 @@
+apiVersion: v1
+name: es-attendance
+description: A HELM Chart for attendance microservice
+version: 0.0.1
