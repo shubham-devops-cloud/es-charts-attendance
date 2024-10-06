@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.Name }}-kcm"
+  namespace: "{{ .Values.NAMESPACE }}"
+  labels:
+    environment: "{{ .Values.NAMESPACE }}"
+    app: "{{ .Values.APP }}"
+    microservice: "{{ .Values.MICROSERVICE }}"
+data:
+  git_clone.sh: |
+    #!/bin/sh
+    git clone https://www.github.com
+    
+  git_backup.sh: |
+    #!/bin/sh
+    git clone https://www.github.com
