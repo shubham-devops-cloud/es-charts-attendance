@@ -1,0 +1,23 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Values.NAME }}-hpa"
+  namespace: "{{ .Values.NAMESPACE }}"
+  labels:
+    environment: "{{ .Values.NAMESPACE }}"
+    app: "{{ .Values.APP }}"
+    microservice: "{{ .Values.MICROSERVICE }}"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Values.NAME }}-kd"
+  maxReplicas: {{ .Values.AUTOSCALE_MAX_REPLICA | default "4" }}
+  minReplicas: {{ .Values.AUTOSCALE_MIN_REPLICA | default "2" }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
