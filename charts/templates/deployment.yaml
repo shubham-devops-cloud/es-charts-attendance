@@ -30,21 +30,44 @@ spec:
       containers:
       - name: "{{ .Values.NAME }}-kc"
         image: "{{ .Values.DOCKER_APP_IMAGE }}"
-        # resources:
-        #   requests: 
-        #     memory: {{ .Values.K8S_REQ_MEM }}
-        #     cpu: {{ .Values.K8S_REQ_CPU }}
-        #   limits:
-        #     memory: {{ .Values.K8S_LIMIT_MEM }}
-        #     cpu: {{ .Values.K8S_LIMIT_CPU }}
-        # command: ["sh", "-c"]
-        # args: 
-        #   - ${GitClone}
-        # env:
-        #   - name: GitClone
-        #     valueFrom:
-        #       configMapKeyRef:
-        #         name: "{{ .Values.Name }}-kcm"
-        #         key: git_clone.sh
         ports:
         - containerPort: 8081
+        
+        resources:
+          requests: 
+            memory: {{ .Values.K8S_REQ_MEM }}
+            cpu: {{ .Values.K8S_REQ_CPU }}
+          limits:
+            memory: {{ .Values.K8S_LIMIT_MEM }}
+            cpu: {{ .Values.K8S_LIMIT_CPU }}
+        command: ["sh", "-c"]
+        args: 
+          - ${GitClone}
+        env:
+          - name: GitClone
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.Name }}-kcm"
+                key: git_clone.sh
+        
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          failureThreshold: 30
+          periodSeconds: 10
+        
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        
