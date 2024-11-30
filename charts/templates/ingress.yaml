@@ -11,6 +11,10 @@ metadata:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/subnets: subnet-ba45.subnet-ad123,subnet-ad313
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/wafv2-acl-id: "arn:aws:wafv2:us-west-2:8333205604:regional/webacl/MyRateLimitWebACL/abc123"  # Attach WAF WebACL
+    nginx.ingress.kubernetes.io/limit-rps: "2"                 # 2 requests per second
+    nginx.ingress.kubernetes.io/limit-rpm: "10"                # 10 requests per minute
+    nginx.ingress.kubernetes.io/limit-connections: "1"         # Maximum number of connections per client
 spec:
   ingressClassName: alb
   rules:
