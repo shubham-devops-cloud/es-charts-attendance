@@ -1,0 +1,32 @@
+## VPA does not comes bydefault like HPA. It need to install as pods
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: "{{ .Values.NAME }}-vpa"
+  namespace: "{{ .Values.NAMESPACE }}"
+  labels:
+    environment: "{{ .Values.NAMESPACE }}"
+    app: "{{ .Values.APP }}"
+    microservice: "{{ .Values.MICROSERVICE }}"
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Values.NAME }}-kd"
+  updatePolicy:
+    updateMode: "Auto" 
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "{{ .Values.NAME }}-kc"
+      minAllowed:
+        cpu: "250m"
+      maxAllowed:
+        cpu: "2"
+      
+
+### updatePolidy modes:
+# Off: Only recommeneds. Does not change
+# Initial: Only change on pod creation, Not later
+# RecreateL: Evict pod if usage goes beyond range
+# Auto: Update existing pod. This mod is similar to recreate.
